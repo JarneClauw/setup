@@ -5,11 +5,16 @@
 inputs: let
   modules = l: map (module: ./. + "/../../modules/${module}.nix") l;
 in {
-  imports = modules [
+  imports = (modules [
     ### BASE MODULES ###
     "nix" "keyboard" "locale" "network" "sound"
     ### EXTRA MODULES ###
     "gnome" "bluetooth" "fonts" "printer" "touchpad"
+  ]) ++ [
+    ### EXTRA CONFIGS ###
+    ./packages.nix
+    ./backup.nix
+    ./antivirus.nix
   ];
 
   ### BOOTLOADER ###
