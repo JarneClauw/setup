@@ -3,5 +3,32 @@
 ###
 
 inputs: {
+  environment.systemPackages = with inputs.pkgs.unstable; [ clamav cpulimit ];
 
+  services.clamav = {
+    daemon.enable = true;	# Enable clamd
+    updater.enable = true;	# Update the database
+  };
+
+  ### SERVICE ###
+  # Scan the home directory (limit to 25% CPU)
+  systemd.services.clamscan = {
+    script = "${inputs.pkgs.unstable.cpulimit}/bin/cpulimit --limit=25 -- ${inputs.pkgs.unstable.clamav}/bin/clamscan --infected --recursive --log=/home/jarne/clamscan/logs/$(date +%Y%m%d) --move=/home/jarne/infected /home/jarne";
+  };
+
+  # Make sure the directories are created
+  systemd.tmpfiles.rules = [
+    "d /home/jarne/clamscan/logs - jarne users"
+    "d /home/jarne/clamscan/infected - jarne users"
+  ];
+
+  ### AUTOMATE SERVICE ###
+  systemd.timers.clamscan = {
+    wantedBy = ["timers.target"];
+    timerConfig = {
+      OnCalendar = "daily";
+      Persistent = true;		# Also run when service missed timer that day
+      Unit = "clamscan.service";
+    };
+  };
 }
