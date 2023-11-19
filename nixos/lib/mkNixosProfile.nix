@@ -17,7 +17,6 @@ in {
     inherit system;
     specialArgs = inputs';
     modules = [
-      (./. + "/../profiles/config.nix")
       (./. + "/../profiles/${host}/config.nix")
       (./. + "/../profiles/${host}/hardware.nix")
     ];

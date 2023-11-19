@@ -2,13 +2,31 @@
 ### Neso
 ###
 
-inputs: {
-  imports = [
-    ../../modules/bluetooth.nix
-    ../../modules/fonts.nix
-    ../../modules/printer.nix
-    ../../modules/touchpad.nix
+inputs: let
+  modules = l: map (module: ./. + "/../../modules/${module}.nix") l;
+in {
+  imports = modules [
+    ### BASE MODULES ###
+    "nix" "keyboard" "locale" "network" "sound"
+    ### EXTRA MODULES ###
+    "gnome" "bluetooth" "fonts" "printer" "touchpad"
   ];
+
+  ### BOOTLOADER ###
+  boot.loader = {
+    timeout = 1;		# Wait 1s before auto selection
+    grub = {
+      enable = true;
+      devices = [ "nodev" ];
+      efiSupport = true;
+      useOSProber = true;	# Find other OS's
+      configurationLimit = 5;	# Keep 5 configurations
+    };
+    efi = {
+      canTouchEfiVariables = true;
+      efiSysMountPoint = "/boot";
+    };
+  };
 
   ### USERS ###
   users.users."jarne" = {
@@ -21,9 +39,8 @@ inputs: {
   services.xserver = {
     enable = true;
     displayManager.gdm.enable = true;
-    desktopManager.gnome.enable = true;
   };
 
-  ### GNOME ###
-  # Removing all default applications
+  ### STATE VERSION ###
+  system.stateVersion = inputs.stateVersion;
 }
