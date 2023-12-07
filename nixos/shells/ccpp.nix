@@ -14,9 +14,16 @@
         packages = with pkgs; [
 	  # Fixes headers not being found
 	  clang-tools
+	  # Other Compiler
+	  # ... gcc12
 	  # Tools
 	  cmake
 	  valgrind
+	  imhex
+	  # Memory management
+	  massif-visualizer
+	  # Benchmark
+	  hyperfine
 	];
       };
     });

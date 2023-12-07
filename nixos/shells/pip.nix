@@ -16,7 +16,7 @@
           python311
 	  python311Packages.pip
 	];
-	runScript = "zsh";
+	runScript = "bash";
       }).env;
     });
   };
