@@ -10,9 +10,6 @@
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
   };
 
-  outputs = inputs: let
-    stateVersion = "23.05";
-    inputs' = inputs // { inherit stateVersion; };
-  in
-    import ./lib/mkNixosProfile.nix { host = "neso"; system = "x86_64-linux"; inputs = inputs'; };
+  outputs = inputs:
+    import ./lib/mkNixosProfile.nix { host = "neso"; system = "x86_64-linux"; inputs = inputs; };
 }

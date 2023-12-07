@@ -11,8 +11,11 @@ in {
     ### EXTRA MODULES ###
     "gnome" "bluetooth" "fonts" "printer" "touchpad"
   ]) ++ [
+    ### PACKAGES ###
+    ../../packages/base.nix
+    ../../packages/terminal.nix
+    ../../packages/rice.nix
     ### EXTRA CONFIGS ###
-    ./packages.nix
     ./backup.nix
     ./antivirus.nix
   ];
@@ -47,5 +50,5 @@ in {
   };
 
   ### STATE VERSION ###
-  system.stateVersion = inputs.stateVersion;
+  system.stateVersion = "23.05";
 }
