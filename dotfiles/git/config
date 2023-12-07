@@ -1,0 +1,21 @@
+[alias]
+	unstage = "restore --staged"
+	discard = "restore"
+	undo = "reset --soft HEAD~1"
+	graph = "log --graph"
+
+[core]
+	editor = "nvim"
+
+[init]
+	defaultBranch = "main"
+
+[pull]
+	rebase = false
+
+[push]
+	autoSetupRemote = true
+
+[user]
+	email = "67628242+JarneClauw@users.noreply.github.com"
+	name = "Jarne Clauw"

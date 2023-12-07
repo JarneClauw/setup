@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+
+print() {
+  BOLD="\033[1m"
+  RESET="\033[0m"
+  BLUE="\033[34m"
+  echo -e "${BOLD}${BLUE}$1${RESET}"
+}
+
+print "Setting up the development environment"
+
+### GIT ###
+print "Setup Git"
+rm -rf $HOME/.config/git
+mkdir -p $HOME/.config/git
+stow -t $HOME/.config/git git
+
