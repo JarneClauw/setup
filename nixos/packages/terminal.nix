@@ -4,10 +4,10 @@
 
 inputs: {
   environment.systemPackages = with inputs.pkgs.unstable; [
-    alacritty
+    kitty
     git
     zsh
-    direnv
+    fish
     neovim
     htop
     tldr
@@ -16,4 +16,16 @@ inputs: {
     hyperfine
     stow
   ];
+
+  # Direnv setup
+  programs.direnv = {
+    enable = true;
+    package = inputs.pkgs.unstable.direnv;
+    silent = true;
+    loadInNixShell = true;
+    nix-direnv = {
+      enable = true;
+      package = inputs.pkgs.unstable.nix-direnv;
+    };
+  };
 }
