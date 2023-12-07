@@ -9,9 +9,15 @@ print() {
 
 print "Setting up the development environment"
 
+### ALACRITTY ###
+print "Setup Alacritty"
+dir=$HOME/.config/alacritty
+rm -rf $dir; mkdir -p $dir
+stow -t $dir alacritty
+
 ### GIT ###
 print "Setup Git"
-rm -rf $HOME/.config/git
-mkdir -p $HOME/.config/git
-stow -t $HOME/.config/git git
+dir=$HOME/.config/git
+rm -rf $dir; mkdir -p $dir
+stow -t $dir git
 

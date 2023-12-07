@@ -4,7 +4,7 @@
 
 inputs: {
   environment.systemPackages = with inputs.pkgs.unstable; [
-    kitty
+    alacritty
     git
     zsh
     fish
