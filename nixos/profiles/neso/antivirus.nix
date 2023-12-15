@@ -18,6 +18,7 @@ inputs: {
 
   # Make sure the directories are created
   systemd.tmpfiles.rules = [
+    "d /home/jarne/clamscan - jarne users"
     "d /home/jarne/clamscan/logs - jarne users"
     "d /home/jarne/clamscan/infected - jarne users"
   ];
