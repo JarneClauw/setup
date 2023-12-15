@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+RESET="\e[0m"
+ERROR="\e[1;31m"
+MESSAGE="\e[1;34m"
+
+print() {
+  echo -e "${MESSAGE}$1${RESET}"
+}
+
+error() {
+  echo -e "${ERROR}$1${RESET}"
+}
+
+theme=$1
+if [[ "$theme" == "ice" ]]; then
+  print "Setting up the theme"
+else
+  error "Invalid theme"
+  exit 1
+fi
+
+### ALACRITTY ###
+cp $HOME/.config/alacritty/$theme.yml $HOME/.config/alacritty/theme.yml
+

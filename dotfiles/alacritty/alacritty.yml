@@ -14,24 +14,27 @@ scrolling:
 
 font:
   normal:
-    family: Hack Nerd Font
+    family: FiraCode Nerd Font
     style: Regular
   bold:
-    family: Hack Nerd Font
+    family: FiraCode Nerd Font
     style: Bold
   italic:
-    family: Hack Nerd Font
+    family: FiraCode Nerd Font
     style: Italic
   bold_italic:
-    family: Hack Nerd Font
+    family: FiraCode Nerd Font
     style: Bold Italic
   size: 11.0
 
 import: 
-  - ~/.config/alacritty/glacier.yml 
+  - ~/.config/alacritty/theme.yml 
 
 shell:
   program: zsh
+
+visual_bell:
+  duration: 0
 
 key_bindings:
   - { key: N, mods: Control|Shift, action: CreateNewWindow }

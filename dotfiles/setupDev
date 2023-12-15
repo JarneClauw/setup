@@ -1,10 +1,15 @@
 #!/usr/bin/env bash
 
+RESET="\e[0m"
+ERROR="\e[1;31m"
+MESSAGE="\e[1;34m"
+
 print() {
-  BOLD="\033[1m"
-  RESET="\033[0m"
-  BLUE="\033[34m"
-  echo -e "${BOLD}${BLUE}$1${RESET}"
+  echo -e "${MESSAGE}$1${RESET}"
+}
+
+error() {
+  echo -e "${ERROR}$1${RESET}"
 }
 
 print "Setting up the development environment"
