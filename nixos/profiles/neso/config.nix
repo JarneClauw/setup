@@ -25,7 +25,7 @@ in {
     timeout = 1;		# Wait 1s before auto selection
     grub = {
       enable = true;
-      devices = [ "nodev" ];
+      device = "nodev";
       efiSupport = true;
       useOSProber = true;	# Find other OS's
       configurationLimit = 5;	# Keep 5 configurations
@@ -50,5 +50,5 @@ in {
   };
 
   ### STATE VERSION ###
-  system.stateVersion = "23.05";
+  system.stateVersion = "23.11";
 }

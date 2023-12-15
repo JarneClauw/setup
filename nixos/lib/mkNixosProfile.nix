@@ -4,7 +4,11 @@
 
 { host, system, inputs }: let
   overlay = final: prev: {
-    unstable = import inputs.nixpkgs-unstable { inherit system; config.allowUnfree = true; };
+    unstable = import inputs.nixpkgs-unstable {
+      inherit system;
+      config.allowUnfree = true;
+      config.permittedInsecurePackages = ["electron-25.9.0"];
+    };
   };
   pkgs = import inputs.nixpkgs {
     inherit system;
