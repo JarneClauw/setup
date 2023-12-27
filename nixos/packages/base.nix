@@ -13,6 +13,7 @@ inputs: {
     brave
     discord
     spotify
+    spicetify-cli
     virt-manager
     betterbird
     libreoffice

@@ -1,0 +1,59 @@
+format = """
+$username\
+$hostname\
+$directory\
+$git_branch\
+$git_state\
+$git_status\
+$character"""
+right_format = """
+$nix_shell\
+$cmd_duration"""
+add_newline = false
+
+
+
+### GENERAL ###
+[username]
+style_root = "bold black"
+style_user = "bold black"
+format = "[$user@]($style)"
+show_always = true
+
+[hostname]
+ssh_only = false
+format = "[$ssh_symbol$hostname]($style) "
+style = "bold black"
+
+[directory]
+style = "bold white"
+
+[cmd_duration]
+min_time = 10_000
+show_milliseconds = true
+format = "[$duration]($style)"
+style = "white"
+show_notifications = true
+min_time_to_notify = 600_000
+
+
+### VCS ###
+[git_branch]
+format = "[$branch(:$remote_branch)]($style) "
+style = "bold yellow"
+
+[git_state]
+style = "bold yellow"
+format = "[$state]($style) "
+
+[git_status]
+format = '([\[($ahead_behind|)$staged$modified$untracked\]]($style) )'
+style = "bold yellow"
+
+
+
+### NIX-SHELL ###
+[nix_shell]
+format = "$state "
+impure_msg = "[❄️](bold blue)" 
+pure_msg = "[❄️](bold white)"

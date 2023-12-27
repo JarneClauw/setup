@@ -5,9 +5,10 @@
 inputs: {
   environment.systemPackages = with inputs.pkgs.unstable; [
     alacritty
-    git
     zsh
-    fish
+    starship
+    tmux
+    git
     neovim
     htop
     tldr

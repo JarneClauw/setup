@@ -5,24 +5,34 @@ ERROR="\e[1;31m"
 MESSAGE="\e[1;34m"
 
 print() {
-  echo -e "${MESSAGE}$1${RESET}"
+    echo -e "${MESSAGE}$1${RESET}"
 }
 
 error() {
-  echo -e "${ERROR}$1${RESET}"
+    echo -e "${ERROR}$1${RESET}"
 }
+
+CONFIG=$HOME/.config
 
 print "Setting up the development environment"
 
 ### ALACRITTY ###
 print "Setup Alacritty"
-dir=$HOME/.config/alacritty
-rm -rf $dir; mkdir -p $dir
-stow -t $dir alacritty
+rm -rf $CONFIG/alacritty; mkdir -p $CONFIG/alacritty
+stow -t $CONFIG/alacritty alacritty
 
 ### GIT ###
 print "Setup Git"
-dir=$HOME/.config/git
-rm -rf $dir; mkdir -p $dir
-stow -t $dir git
+rm -rf $CONFIG/git; mkdir -p $CONFIG/git
+stow -t $CONFIG/git git
 
+### ZSH ###
+print "Setup ZSH"
+rm -rf $HOME/.zshenv $CONFIG/zsh; mkdir -p $CONFIG/zsh
+stow --ignore=".zshenv" -t $CONFIG/zsh zsh
+stow --ignore=".zshrc" -t $HOME zsh
+
+### STARSHIP ###
+print "Setup Starship"
+rm -rf $CONFIG/starship; mkdir -p $CONFIG/starship
+stow -t $CONFIG/starship starship

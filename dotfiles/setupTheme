@@ -12,14 +12,29 @@ error() {
   echo -e "${ERROR}$1${RESET}"
 }
 
+link() {
+    ln -sf $1 $2 
+}
+
+# Check if the config variable is defined
+if [[ -z $CONFIG ]]; then
+    CONFIG=$HOME/.config
+fi
+
+# Check the theme name
 theme=$1
 if [[ "$theme" == "ice" ]]; then
-  print "Setting up the theme"
+  print "Setting up the theme: $theme"
 else
   error "Invalid theme"
   exit 1
 fi
 
+
+
 ### ALACRITTY ###
-cp $HOME/.config/alacritty/$theme.yml $HOME/.config/alacritty/theme.yml
+link $CONFIG/alacritty/$theme.yml $CONFIG/alacritty/theme.yml
+
+### STARSHIP ###
+link $CONFIG/starship/$theme.toml $CONFIG/starship/starship.toml
 
