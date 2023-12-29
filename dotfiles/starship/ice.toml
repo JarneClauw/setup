@@ -40,20 +40,20 @@ min_time_to_notify = 600_000
 ### VCS ###
 [git_branch]
 format = "[$branch(:$remote_branch)]($style) "
-style = "bold yellow"
+style = "bold bright-purple"
 
 [git_state]
-style = "bold yellow"
+style = "bold bright-purple"
 format = "[$state]($style) "
 
 [git_status]
-format = '([\[($ahead_behind|)$staged$modified$untracked\]]($style) )'
-style = "bold yellow"
+format = '([\[$ahead_behind$staged$modified$untracked\]]($style) )'
+style = "bold bright-purple"
 
 
 
 ### NIX-SHELL ###
 [nix_shell]
 format = "$state "
-impure_msg = "[❄️](bold blue)" 
+impure_msg = "[❄️](bold bright-cyan)" 
 pure_msg = "[❄️](bold white)"
