@@ -29,3 +29,6 @@ add_plugin "zsh-users/zsh-syntax-highlighting"
 
 ### STARSHIP ###
 eval "$(starship init zsh)"
+
+### DIRENV ###
+eval "$(direnv hook zsh)"
