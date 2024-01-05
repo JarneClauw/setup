@@ -8,6 +8,9 @@
     # Nix Packages
     nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
+
+    # Sops-nix
+    sops-nix.url = "github:Mic92/sops-nix";
   };
 
   outputs = inputs:

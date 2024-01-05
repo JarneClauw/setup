@@ -1,0 +1,21 @@
+keys:
+  - &user_jarne age1ellarpjtndc0w037w7zsplfx4nfvvnc0e4cgk6n293yq0gd44sfs8v0v4y 
+  - &host_neso age1k63hgq52nsyu8lyr847de40nnkgf97x85s7pre5ws9kpgh26qv3sqc9grl
+  - &host_kore age1d3kqytrhcxea0uazvuq2pkhgjfaxd6d5su4rh40htxv07glv4uxskjhsmn
+  - &host_hydra age1szxcdfcfg4z9f0mt4m7hzurn6a6dkn7f8xwxw59fnvg0t80c9p8s2tvjtz
+creation_rules:
+  - path_regex: secrets/neso/[^/]+\.yaml$
+    key_groups:
+    - age:
+      - *user_jarne
+      - *host_neso
+  - path_regex: secrets/kore/[^/]+\.yaml$
+    key_groups:
+    - age:
+      - *user_jarne
+      - *host_kore
+  - path_regex: secrets/hydra/[^/]+\.yaml$
+    key_groups:
+    - age:
+      - *user_jarne
+      - *host_hydra

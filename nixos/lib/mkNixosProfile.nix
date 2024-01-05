@@ -23,6 +23,7 @@ in {
     modules = [
       (./. + "/../profiles/${host}/config.nix")
       (./. + "/../profiles/${host}/hardware.nix")
+      inputs.sops-nix.nixosModules.sops
     ];
   };
 }

@@ -7,6 +7,7 @@ inputs: {
     # NixOS config
     sops
     age
+    ssh-to-age
     # Other
     vscode
     firefox
