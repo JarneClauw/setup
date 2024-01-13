@@ -3,8 +3,8 @@ colors:
     background: '#0c1214'
     foreground: '#f2f2f2'
   cursor:
-    cursor: '#292c33'
-    text: '#292c33'
+    cursor: '#f2f2f2'
+    text: '#f2f2f2'
   selection:
     background: '#13a3bf'
     text: '#f2f2f2'

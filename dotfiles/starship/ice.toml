@@ -17,15 +17,16 @@ add_newline = false
 [username]
 style_root = "bold black"
 style_user = "bold black"
-format = "[$user@]($style)"
+format = "[$user]($style)"
 show_always = true
 
 [hostname]
 ssh_only = false
-format = "[$ssh_symbol$hostname]($style) "
+format = "[@$hostname]($style) "
 style = "bold black"
 
 [directory]
+format = "[$path]($style) [$read_only]($read_only_style)"
 style = "bold white"
 
 [cmd_duration]
@@ -35,6 +36,7 @@ format = "[$duration]($style)"
 style = "white"
 show_notifications = true
 min_time_to_notify = 600_000
+
 
 
 ### VCS ###
@@ -55,5 +57,5 @@ style = "bold bright-purple"
 ### NIX-SHELL ###
 [nix_shell]
 format = "$state "
-impure_msg = "[❄️](bold bright-cyan)" 
+impure_msg = "[❄](bold bright-cyan)" 
 pure_msg = "[❄️](bold white)"
