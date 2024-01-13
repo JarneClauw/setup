@@ -21,6 +21,10 @@ alias ll="lsd -l"
 alias la="lsd -la"
 alias vim="nvim"
 
+### KEYBINDS ###
+bindkey "^[[A" history-substring-search-up
+bindkey "^[[B" history-substring-search-down
+
 ### PLUGINS ###
 add_plugin "zsh-users/zsh-autosuggestions"
 add_plugin "zsh-users/zsh-completions"
