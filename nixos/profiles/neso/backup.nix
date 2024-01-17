@@ -5,7 +5,7 @@
 # Using restic with rclone. 'rclone config' to setup repositories used by restic
 # Don't encrypt the rclone config, restic had problems decrypting it
 # 'restic -r rclone:<name>:/backup snapshots' to show a list with snapshots
-# 'restic -r rclone:<name>:/backup restore <id/last> --target <path>' to restore
+# 'restic -r rclone:<name>:/backup restore <id/latest> --target <path>' to restore
 
 inputs: let
   initialize = true;                # Create the directory if it does not exist
