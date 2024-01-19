@@ -5,11 +5,11 @@ ERROR="\e[1;31m"
 MESSAGE="\e[1;34m"
 
 print() {
-  echo -e "${MESSAGE}$1${RESET}"
+    echo -e "${MESSAGE}$1${RESET}"
 }
 
 error() {
-  echo -e "${ERROR}$1${RESET}"
+    echo -e "${ERROR}$1${RESET}"
 }
 
 link() {
@@ -24,16 +24,16 @@ fi
 # Check the theme name
 theme=$1
 if [[ "$theme" == "ice" ]]; then
-  print "Setting up the theme: $theme"
+    print "Setting up the theme: $theme"
 else
-  error "Invalid theme"
-  exit 1
+    error "Invalid theme"
+    exit 1
 fi
 
 
 
 ### ALACRITTY ###
-link $CONFIG/alacritty/$theme.yml $CONFIG/alacritty/theme.yml
+link $CONFIG/alacritty/$theme.toml $CONFIG/alacritty/theme.toml
 
 ### STARSHIP ###
 link $CONFIG/starship/$theme.toml $CONFIG/starship/starship.toml

@@ -12,7 +12,9 @@ error() {
     echo -e "${ERROR}$1${RESET}"
 }
 
-CONFIG=$HOME/.config
+if [[ -z $CONFIG ]]; then
+    CONFIG=$HOME/.config
+fi
 
 print "Setting up the development environment"
 
@@ -36,3 +38,4 @@ stow --ignore=".zshrc" -t $HOME zsh
 print "Setup Starship"
 rm -rf $CONFIG/starship; mkdir -p $CONFIG/starship
 stow -t $CONFIG/starship starship
+
