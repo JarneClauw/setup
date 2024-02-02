@@ -39,8 +39,3 @@ print "Setup Starship"
 rm -rf $CONFIG/starship; mkdir -p $CONFIG/starship
 stow -t $CONFIG/starship starship
 
-### OBSIDIAN ###
-print "Setup Obsidian"
-rm -rf $DATA/.obsidian; mkdir -p $DATA/.obsidian
-stow -t $DATA/.obsidian obsidian
-
