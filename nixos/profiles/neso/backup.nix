@@ -24,7 +24,7 @@ inputs: let
   pruneOpts = ["--keep-daily 365"]; # Keep snapshots for 1 year
 in {
   ### PACKAGES ###
-  environment.systemPackages = with inputs.pkgs.unstable; [
+  environment.systemPackages = with inputs.pkgs; [
     rclone
     restic
   ];

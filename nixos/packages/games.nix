@@ -3,7 +3,7 @@
 ###
 
 inputs: {
-  environment.systemPackages = with inputs.pkgs.unstable; [
+  environment.systemPackages = with inputs.pkgs; [
     mgba	# GameBoy Advanced emulator
     desmume	# Nintendo DS emulator
     # steam	# Enabled through config

@@ -7,13 +7,13 @@
     unstable = import inputs.nixpkgs-unstable {
       inherit system;
       config.allowUnfree = true;
-      config.permittedInsecurePackages = ["electron-25.9.0"];
     };
   };
   pkgs = import inputs.nixpkgs {
     inherit system;
     config.allowUnfree = true;
     overlays = [ overlay ];
+    config.permittedInsecurePackages = ["electron-25.9.0"];
   };
   inputs' = inputs // { inherit host system pkgs; };
 in {

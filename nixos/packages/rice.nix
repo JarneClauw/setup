@@ -3,7 +3,7 @@
 ###
 
 inputs: {
-  environment.systemPackages = with inputs.pkgs.unstable; [
+  environment.systemPackages = with inputs.pkgs; [
     neofetch
     cbonsai
     cmatrix

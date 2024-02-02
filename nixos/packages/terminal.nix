@@ -3,7 +3,7 @@
 ###
 
 inputs: {
-  environment.systemPackages = with inputs.pkgs.unstable; [
+  environment.systemPackages = with inputs.pkgs; [
     alacritty
     zsh
     starship
@@ -21,12 +21,10 @@ inputs: {
   # Direnv setup
   programs.direnv = {
     enable = true;
-    package = inputs.pkgs.unstable.direnv;
     silent = true;
     loadInNixShell = true;
     nix-direnv = {
       enable = true;
-      package = inputs.pkgs.unstable.nix-direnv;
     };
   };
 }

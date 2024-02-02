@@ -3,7 +3,7 @@
 ###
 
 inputs: {
-  environment.systemPackages = with inputs.pkgs.unstable; [ clamav ];
+  environment.systemPackages = with inputs.pkgs; [ clamav ];
 
   services.clamav = {
     daemon.enable = true;	# Enable clamd
@@ -12,7 +12,7 @@ inputs: {
 
   ### SERVICE ###
   systemd.services.clamscan = {
-    script = "${inputs.pkgs.unstable.clamav}/bin/clamscan --infected --recursive --log=/home/jarne/clamscan/logs/$(date +%Y%m%d) --move=/home/jarne/clamscan/infected /home/jarne";
+    script = "${inputs.pkgs.clamav}/bin/clamscan --infected --recursive --log=/home/jarne/clamscan/logs/$(date +%Y%m%d) --move=/home/jarne/clamscan/infected /home/jarne";
   };
 
   # Make sure the directories are created

@@ -16,7 +16,7 @@ inputs: {
   # Autodiscovery of network printers (IPP Everywhere protocol)
   services.avahi = {
     enable = true;
-    nssmdns = true;
+    nssmdns4 = true;
     openFirewall = true;
   };
 

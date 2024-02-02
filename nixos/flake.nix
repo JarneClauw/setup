@@ -6,7 +6,7 @@
     # Check if inputs used by flake
 
     # Nix Packages
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
 
     # Sops-nix
