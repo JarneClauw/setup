@@ -8,18 +8,23 @@ inputs: {
     sops
     age
     ssh-to-age
+    # File management
+    gnome.nautilus
+    gnome.file-roller
+    # Notes
+    obsidian
+    xournalpp
+    # Music
+    spotify
+    spicetify-cli
     # Other
-    vscode
     firefox
     brave
     discord
-    spotify
-    spicetify-cli
+    vscode
     virt-manager
     betterbird
     libreoffice
-    obsidian
-    xournalpp
   ];
 
   # Virt-manager

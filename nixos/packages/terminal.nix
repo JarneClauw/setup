@@ -16,6 +16,8 @@ inputs: {
     lsd
     hyperfine
     stow
+    lf
+    feh
   ];
 
   # Direnv setup

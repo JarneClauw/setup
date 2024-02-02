@@ -10,7 +10,6 @@ inputs: {
     ../../modules/locale.nix
     ../../modules/network.nix
     ../../modules/sound.nix
-    ../../modules/gnome.nix
     ../../modules/bluetooth.nix
     ../../modules/fonts.nix
     ../../modules/printer.nix
@@ -19,6 +18,7 @@ inputs: {
     ../../packages/base.nix
     ../../packages/terminal.nix
     ../../packages/rice.nix
+    ../../packages/games.nix
     ### EXTRA CONFIGS ###
     ./backup.nix
     ./antivirus.nix
@@ -50,8 +50,14 @@ inputs: {
   ### ENVIRONMENT ###
   services.xserver = {
     enable = true;
+    desktopManager.gnome.enable = true;
+    windowManager.xmonad = {
+      enable = true;
+      enableContribAndExtras = true;
+    };
     displayManager.gdm.enable = true;
   };
+  services.gnome.core-utilities.enable = false;
 
   ### SOPS-NIX ###
   sops.defaultSopsFile = ../../secrets/neso/default.yaml;
