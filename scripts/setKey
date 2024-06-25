@@ -1,0 +1,127 @@
+#!/usr/bin/env bash
+
+#### CONSTANTS & VARIABLES ####
+script_dir=$(cd $(dirname ${BASH_SOURCE[0]}) && pwd)
+script_name=$(basename $0)
+
+host=true
+name=""
+
+options="hun:"
+options_long="help,user,name:"
+
+text_help="Usage: $script_name [OPTIONS] <private_key> <public_key>
+
+Set the host or user ssh key pair (only works for ed25519 keys).
+Execute 'ssh-keygen -t ed25519 -C <comment>' to create a ssh key.
+
+Host (default):
+  - Copy to /etc/ssh_host_ed25519_key(.pub)
+
+User (-u, --user):
+  - Copy to $HOME/.ssh/<key>(.pub)
+  - Add to the ssh-agent
+
+Options:
+  -h, --help			Prints this ...
+  -n, --name			Update the (name, key) pair in SOPS
+  -u, --user			Set up the ssh key for a user"
+text_info="See '$script_name --help' for more information."
+
+#### FUNCTIONS ####
+log() {
+    "$script_dir/log" "$1" "$2"
+}
+
+host() {
+    # Variables
+    private_ssh=$1
+    public_ssh=$2
+
+    # Copying the private and public key to /etc/ssh/
+    sudo cp "$private_ssh" "/etc/ssh/ssh_host_ed25519_key"
+    sudo cp "$public_ssh" "/etc/ssh/ssh_host_ed25519_key.pub"
+}
+
+user() {
+    # Variables
+    private_ssh=$1
+    public_ssh=$2
+
+    # Copying the private and public key to $HOME/.ssh
+    cp "$private_ssh" "$public_ssh" "$HOME/.ssh/"
+
+    # Add the ssh key to the ssh-agent
+    eval "$(ssh-agent -s)"
+    ssh-add "$private_ssh"
+    log warning "Do not forget to change the ssh key on GitHub!"
+}
+
+sops() {
+    echo "sops"
+}
+
+#### PROCESSING OPTIONS & ARGUMENTS ####
+# Parse the options
+parsed=$("$script_dir/parse_input" $options $options_long "$@")
+if [[ $? -ne 0 ]]; then
+    log error "$parsed"
+    log error "$text_info"
+    exit 1
+fi
+eval set -- "$parsed"
+
+# Handle the options
+while true; do
+    case "$1" in
+        -h|--help)
+	    echo "$text_help"
+	    exit 0 ;;
+	-n|--name)
+	    name=$2
+	    shift 2 ;;
+	-u|--user)
+	    host=false
+	    shift ;;
+	--)
+	    shift
+	    break ;;
+	*)
+	    log error "Whoops, this should not have happened!"
+	    exit 1 ;;
+    esac
+done
+
+# Handle the arguments
+if [[ $# -ne 2 ]]; then
+    log error "We expected 2 arguments."
+    log error "$text_info"
+    exit 1
+fi
+
+private_ssh=$1
+public_ssh=$2
+
+#### EXECUTE ####
+if [[ $host = true ]]; then
+    host "$private_ssh" "$public_ssh"
+else
+    user "$private_ssh" "$public_ssh"
+fi
+if [[ $? -ne 0 ]]; then
+    log error "Failed to set the ssh key pair."
+else
+    log ok "Successfully set the ssh key pair."
+fi
+
+if [[ -n "$name" ]]; then
+    sops "$name" "$private_ssh" "$public_ssh"
+    if [[ $? -ne 0 ]]; then
+        log error "Failed to update SOPS."
+    else
+        log ok "Successfully updated SOPS."
+    fi
+fi
+
+exit 0
+

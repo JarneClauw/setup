@@ -1,0 +1,10 @@
+keys:
+  - &user_jarne age1ellarpjtndc0w037w7zsplfx4nfvvnc0e4cgk6n293yq0gd44sfs8v0v4y
+  - &host_neso age1k63hgq52nsyu8lyr847de40nnkgf97x85s7pre5ws9kpgh26qv3sqc9grl
+creation_rules:
+  - path_regex: secrets/neso/[^/]+\.yaml$
+    key_groups:
+    - age:
+      - *user_jarne
+      - *host_neso
+

@@ -1,0 +1,98 @@
+#!/usr/bin/env bash
+
+#### CONSTANTS & VARIABLES ####
+script_dir=$(cd $(dirname ${BASH_SOURCE[0]}) && pwd)
+script_name=$(basename $0)
+
+reset="\e[0m"
+info="\e[34m"
+ok="\e[32m"
+warning="\e[33m"
+error="\e[31m"
+
+options="h"
+options_long="help"
+
+text_help="Usage: $script_name [OPTIONS] [<message_type>] <message>
+
+Log a message to the terminal.
+
+Options:
+    -h, --help	Display this message
+
+Message types:
+    info	${info}INFO: <message>${reset}
+    ok		${ok}OK: <message>${reset}
+    warning	${warning}WARNING: <message>${reset}
+    error 	${error}ERROR: <message>${reset}"
+text_info="See '$script_name --help' for more information."
+
+#### FUNCTIONS ####
+log() {
+    message_type=$1
+    message=$2
+    message_color=""
+    message_tag="${message_type^^}: "
+
+    case $message_type in
+        info)
+	    message_color=$info ;;
+	ok)
+	    message_color=$ok ;;
+	warning)
+	    message_color=$warning ;;
+	error)
+	    message_color=$error ;;
+	*)
+	    message_color=$reset
+	    message_tag="" ;;
+    esac
+
+    echo -e "$(echo -e "$message" | sed "s/\(.*\)/\\${message_color}${message_tag}\1\\${reset}/")"
+}
+
+#### PROCESSING OPTIONS & ARGUMENTS ####
+# Parse the options
+parsed=$("$script_dir/parse_input" $options $options_long "$@")
+if [[ $? -ne 0 ]]; then
+    log error "$parsed"
+    log error "$text_info"
+    exit 1
+fi
+eval set -- "$parsed"
+
+# Handle the options
+while true; do
+    case "$1" in
+        -h|--help)
+	    echo -e "$text_help"
+	    exit 0 ;;
+	--)
+	    shift
+	    break ;;
+	*)
+	    log error "Whoops, this should not have happened!"
+	    exit 1 ;;
+    esac
+done
+
+# Handle the arguments
+if [[ $# -ne 2 ]] && [[ $# -ne 1 ]]; then
+    log error "We expected 1 or 2 arguments."
+    log error "$text_info"
+    exit 1
+fi
+
+message_type=""
+message=""
+if [[ $# == 1 ]]; then
+    message="$1"
+else
+    message_type="$1"
+    message="$2"
+fi
+
+#### LOG THE MESSAGE ####
+log "$message_type" "$message"
+exit 0
+

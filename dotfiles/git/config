@@ -1,0 +1,25 @@
+[alias]
+	alias = ! git config --get-regexp ^alias\\. | sed -e s/^alias\\.// -e s/\\ /\\ =\\ /
+	stat = "status --short"
+	graph = "log --graph --oneline"
+	discard = "restore"
+	unstage = "restore --staged"
+	forgot = "commit --amend --no-edit"
+	undo = "reset --soft HEAD~1"
+
+[core]
+	editor = "nvim"
+
+[init]
+	defaultBranch = "main"
+
+[pull]
+	rebase = false
+
+[push]
+	autoSetupRemote = true
+
+[user]
+	email = "67628242+JarneClauw@users.noreply.github.com"
+	name = "Jarne Clauw"
+

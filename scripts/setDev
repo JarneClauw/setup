@@ -1,0 +1,121 @@
+#!/usr/bin/env bash
+
+#### CONSTANTS & VARIABLES ####
+script_dir=$(cd $(dirname ${BASH_SOURCE[0]}) && pwd)
+script_name=$(basename $0)
+
+config="$HOME/.config"
+
+options="hc:"
+options_long="help,config:"
+text_help="Usage: $script_name [OPTIONS]
+
+Set up the development environment.
+
+Options:
+    -h, --help			Display this message
+    -c <path>, --config <path>	Set the configuration path, defaults to $config"
+text_info="See '$script_name --help' for more information."
+
+ok=true
+
+#### FUNCTIONS ####
+log() {
+    "$script_dir/log" "$1" "$2"
+}
+
+link() {
+    name=$1
+    dir=$2
+
+    rm -rf "$dir"; mkdir "$dir"
+    stow -t "$dir" "$name"
+    stat "$name" $?
+}
+
+stat() {
+    name=$1
+    status=$2
+
+    if [[ $status == 0 ]]; then
+        log ok "$name"
+    else
+	ok=false
+	log error "$name"
+    fi
+}
+
+#### PROCESSING OPTIONS & ARGUMENTS ####
+# Parse the options
+parsed=$("$script_dir/parse_input" $options $options_long "$@")
+if [[ $? -ne 0 ]]; then
+    log error "$parsed"
+    log error "$text_info"
+fi
+eval set -- "$parsed"
+
+# Handle the options
+while true; do
+    case "$1" in
+        -h|--help)
+	    echo "$text_help"
+	    exit 0 ;;
+	-c|--config)
+	    config=$2
+	    shift 2 ;;
+	--)
+	    shift
+	    break ;;
+	*)
+	    log error "Whoops, this should not have happened!"
+	    exit 1 ;;
+    esac
+done
+
+# Handle the arguments
+if [[ $# -gt 0 ]]; then
+    log error "We did not expect any arguments."
+    log error "$text_info"
+    exit 1
+fi
+
+#### CHECK NECESSARY PACKAGES ####
+stow --version &> /dev/null
+if [[ $? -ne 0 ]]; then
+    log error "The 'stow' package is not installed."
+    exit 1
+fi
+
+#### SET THE DEV ENVIRONMENT ####
+cd ../dotfiles # Packages can't use slashes
+
+# Alacritty
+link alacritty $config/alacritty
+
+# Zsh
+rm -rf $HOME/.zshenv $config/zsh; mkdir -p $config/zsh
+
+stow --ignore=".zshenv" -t $config/zsh zsh
+stat "zsh [1/3]" $?
+
+stow --ignore=".zshrc" -t $HOME zsh
+stat "zsh [2/3]" $?
+
+zsh -c "source $config/zsh/.zshrc"
+stat "zsh [3/3]" $?
+
+# Starship
+link starship $config/starship
+
+# Git
+link git $config/git
+
+#### DONE ####
+if [[ $ok = false ]]; then
+    log error "Failed to set up the development environment."
+    exit 1
+fi
+
+log ok "Successfully set up the development environment."
+exit 0
+
