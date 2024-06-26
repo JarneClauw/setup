@@ -9,7 +9,7 @@
 
   config = lib.mkIf config.moduleLocale.enable {
     time.timeZone = "Europe/Brussels";
-    i18n.defaultLocale = "nl_BE.UTF-8";
+    i18n.defaultLocale = "en_US.UTF-8";
   };
 }
 
