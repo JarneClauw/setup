@@ -46,6 +46,6 @@
 
   #### SOPS-NIX ####
   sops.defaultSopsFile = ../../secrets/neso/default.yaml;
-  sops.age.sshKeyPaths = ["/etc/ssh/ssh_host/ed25519_key"];
+  sops.age.sshKeyPaths = ["/etc/ssh/ssh_host_ed25519_key"];
 }
 
