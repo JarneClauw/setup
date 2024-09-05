@@ -1,8 +1,21 @@
 inputs: {
   imports = [
+    #### HARDWARE ####
     ./data.nix
-    ./development.nix
+
+    #### SETTINGS ####
+    ./fonts.nix
+    ./locale.nix
+    ./network.nix
+    ./nix.nix
+    ./pipewire.nix
+    ./touchpad.nix
+
+    #### ENVIRONMENT ####
     ./gnome.nix
+
+    #### APPLICATIONS ####
+    ./development.nix
     ./terminal.nix
   ];
 }

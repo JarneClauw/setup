@@ -84,6 +84,14 @@
   services.xserver.displayManager.gdm.enable = true;
 
   #### GENERAL SETTINGS ####
+  moduleFonts.enable = true;
+  moduleLocale.enable = true;
+  moduleNetwork.enable = true;
+  moduleNix.enable = true;
+  modulePipewire.enable = true;
+  moduleTouchpad.enable = true;
+
+  #### GENERAL APPLICATIONS ####
   moduleTerminal.enable = true;
   moduleDevelopment.enable = true;
 }
