@@ -16,6 +16,7 @@ inputs: {
 
     #### APPLICATIONS ####
     ./development.nix
+    ./docker.nix
     ./terminal.nix
   ];
 }
