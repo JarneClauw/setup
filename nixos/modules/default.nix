@@ -18,5 +18,6 @@ inputs: {
     ./development.nix
     ./docker.nix
     ./terminal.nix
+    ./virtmanager.nix
   ];
 }
