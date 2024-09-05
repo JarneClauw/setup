@@ -36,6 +36,8 @@
     fsType = "ext4";
     options = [ "nofail" ];
   };
+  moduleData.enable = true;
+  moduleData.users = [ "jarne" ];
 
   #### GENERAL HARDWARE ####
   hardware.cpu.intel.updateMicrocode = true;
