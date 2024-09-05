@@ -84,4 +84,6 @@
   services.xserver.displayManager.gdm.enable = true;
 
   #### GENERAL SETTINGS ####
+  moduleTerminal.enable = true;
+  moduleDevelopment.enable = true;
 }
