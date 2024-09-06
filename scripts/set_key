@@ -1,0 +1,154 @@
+#!/usr/bin/env bash
+
+#### CONSTANTS & VARIABLES ####
+ok=0
+
+host="true"
+name=""
+
+options="hus:"
+options_long="help,user,sops:"
+
+text_help="Usage: $(basename $0) [OPTIONS] <private_key> <public_key>
+
+Set the host/user ssh keys or update the name-key pair in SOPS (only works for ed25519 keys).
+Execute 'ssh-keygen -t ed25519 -C <comment>' to create a ssh key.
+
+Set the host ssh key pair (default):
+  - Copy the keys to '/etc/ssh_host_ed25519_key[.pub]'
+Set the user ssh key pair (-u, --user):
+  - Copy the keys to '$HOME/.ssh/<key>[.pub]'
+  - Add the private key to the ssh-agent
+Update the name-key pair in SOPS
+  - Update the '$CONFIG/sops/age/keys.txt' private age key, if the keys are for a user
+  - Update '$SETUP/nixos/.sops.yaml' with the new keys
+
+Options:
+  -h, --help		Display this message
+  -s, --sops <name>	Update the name-key pair in SOPS
+  -u, --user		Set up the ssh keys for a user"
+text_info="See '$(basename $0) --help' for more information."
+
+#### FUNCTIONS ####
+is_set() {
+  script_dir=$(cd $(dirname ${BASH_SOURCE[0]}) && pwd)
+  "$script_dir/is_set" "$@"
+  [[ $? -ne 0 ]] && exit 1
+}
+
+is_installed() {
+  "$SETUP/scripts/is_installed" "$@"
+  [[ $? -ne 0 ]] && exit 1
+}
+
+log_help() {
+  echo "$text_help"
+}
+
+log() {
+  "$SETUP/scripts/log" "$@"
+}
+
+host() {
+  private_ssh=$1
+  public_ssh=$2
+
+  # Copying the private and public key to /etc/ssh/
+  log info "Password needed to copy files to /etc/ssh/"
+  sudo cp "$private_ssh" "/etc/ssh/ssh_host_ed25519_key"
+  sudo cp "$public_ssh" "/etc/ssh/ssh_host_ed25519_key.pub"
+}
+
+user() {
+  private_ssh=$1
+  public_ssh=$2
+
+  # Copying the private and public key to $HOME/.ssh
+  cp "$private_ssh" "$public_ssh" "$HOME/.ssh/"
+
+  # Add the ssh key to the ssh-agent
+  eval "$(ssh-agent -s)"
+  log info "SSH key password required to add it to the ssh-agent."
+  ssh-add "$private_ssh"
+  log warning "Do not forget to change the ssh key on GitHub!"
+}
+
+update_sops() {
+  name=$1
+  private_ssh=$2
+  public_ssh=$3
+
+  # Requirements
+  is_installed "ssh-to-age" "sops"
+
+  # Private age key
+  if [[ "$host" = "false" ]]; then
+    cp "$private_ssh" "/tmp/private_ssh"
+    log info "SSH key password will be removed to generate the age key."
+    ssh-keygen -p -N "" -f "/tmp/private_ssh"
+    mkdir -p "$CONFIG/sops/age/"
+    ssh-to-age -private-key -i "/tmp/private_ssh" > "$CONFIG/sops/age/keys.txt"
+    rm "/tmp/private_ssh"
+  fi
+
+  # Determine the public age key and update the .sops.yaml
+  public_age=$(ssh-to-age < "$public_ssh")
+  sed -i "s/\( *- &$name \).*/\1$public_age/" "$SETUP/nixos/.sops.yaml"
+}
+
+#### REQUIREMENTS ####
+is_set "CONFIG" "SETUP"
+
+#### OPTIONS & ARGUMENTS ####
+parsed=$("$SETUP/scripts/parse_input" $options $options_long "$@")
+if [[ $? -ne 0 ]]; then
+  log error "$parsed"
+  log error "$text_info"
+  exit 1
+fi
+eval set -- "$parsed"
+
+while true; do
+  case "$1" in
+    -h|--help)
+      log_help
+      exit 0 ;;
+    -s|--sops)
+      name=$2
+      shift 2 ;;
+    -u|--user)
+      host="false"
+      shift ;;
+    --)
+      shift
+      break ;;
+    *)
+      log error "Whoops, this should not have happened!"
+      exit 1 ;;
+  esac
+done
+
+if [[ $# -ne 2 ]]; then
+  log error "We expected 2 arguments."
+  log error "$text_info"
+  exit 1
+fi
+
+private_ssh=$1
+public_ssh=$2
+
+#### SET THE KEYS ####
+if [[ "$host" = "true" ]]; then
+  host "$private_ssh" "$public_ssh"
+else
+  user "$private_ssh" "$public_ssh"
+fi
+log ok "Successfully updated the SSH key pair"
+
+if [[ -n "$name" ]]; then
+  update_sops "$name" "$private_ssh" "$public_ssh"
+  log ok "Successfully updated SOPS"
+fi
+
+[[ $ok -eq 0 ]] && exit 0 || exit 1 
+

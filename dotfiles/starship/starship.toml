@@ -1,0 +1,54 @@
+#### PROMPT ####
+format = """
+$username\
+$hostname\
+$directory\
+$git_branch\
+$git_commit\
+$git_state\
+$git_status\
+$character"""
+right_format = """
+$nix_shell"""
+add_newline = false
+
+#### GENERAL ####
+[username]
+style_root = "bold black"
+style_user = "bold black"
+format = "[$user@]($style)"
+show_always = true
+
+[hostname]
+ssh_only = false
+format = "[$hostname]($style) "
+style = "bold black"
+
+[directory]
+format = "[$path]($style) [$read_only]($read_only_style)"
+style = "bold white"
+
+#### VCS ####
+[git_branch]
+format = "[$branch(:$remote_branch)]($style) "
+style = "bold purple"
+ignore_branches = ["HEAD"]
+
+[git_commit]
+format = "[$hash$tag]($style) "
+style = "bold purple"
+
+[git_state]
+format = "[$state]($style) "
+style = "bold purple"
+
+[git_status]
+format = '([\[$ahead_behind$staged$modified$untracked\]]($style) )'
+style = "bold purple"
+
+#### NIX-SHELL ####
+[nix_shell]
+format = "$state "
+impure_msg = "[❄️](bold bright-cyan)" 
+pure_msg = "[❄️](bold white)"
+

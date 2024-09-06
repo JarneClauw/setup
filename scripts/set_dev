@@ -1,0 +1,116 @@
+#!/usr/bin/env bash
+
+#### CONSTANTS & VARIABLES ####
+ok=0
+
+options="h"
+options_long="help"
+
+text_help="Usage: $(basename $0) [OPTIONS]
+
+Set up the development environment.
+
+Options:
+  -h, --help	Display this message"
+text_info="See '$(basename $0) --help' for more information."
+
+#### FUNCTIONS ####
+is_set() {
+  script_dir=$(cd $(dirname ${BASH_SOURCE[0]}) && pwd)
+  "$script_dir/is_set" "$@"
+  [[ $? -ne 0 ]] && exit 1
+}
+
+is_installed() {
+  "$SETUP/scripts/is_installed" "$@"
+  [[ $? -ne 0 ]] && exit 1
+}
+
+log_help() {
+  echo "$text_help"
+}
+
+log() {
+  "$SETUP/scripts/log" "$@"
+}
+
+link() {
+  name=$1
+  dir=$2
+
+  rm -rf "$dir"; mkdir "$dir"
+  stow -t "$dir" "$name"
+  stat "$name" $?
+}
+
+stat() {
+  name=$1
+  status=$2
+
+  log $status "$name" "$name"
+  [[ $status -ne 0 ]] && ok=1
+}
+
+#### REQUIREMENTS ####
+is_set "CONFIG" "SETUP"
+is_installed "stow"
+
+#### OPTIONS & ARGUMENTS ####
+parsed=$("$SETUP/scripts/parse_input" $options $options_long "$@")
+if [[ $? -ne 0 ]]; then
+  log error "$parsed"
+  log error "$text_info"
+  exit 1
+fi
+eval set -- "$parsed"
+
+while true; do
+  case "$1" in
+    -h|--help)
+      log_help
+      exit 0 ;;
+    --)
+      shift
+      break ;;
+    *)
+      log error "Whoops, this should not have happened!"
+      exit 1 ;;
+  esac
+done
+
+if [[ $# -ne 0 ]]; then
+  log error "We did not expect any arguments."
+  log error "$text_info"
+  exit 1
+fi
+
+#### SET THE DEV ENVIRONMENT ####
+cd "$SETUP/dotfiles" # Packages can't use slashes
+
+# Alacritty
+link alacritty $CONFIG/alacritty
+
+# Zsh
+rm -rf $HOME/.zshenv $CONFIG/zsh; mkdir -p $CONFIG/zsh
+
+stow --ignore=".zshenv" -t $CONFIG/zsh zsh
+stat "zsh [1/3]" $?
+
+stow --ignore=".zshrc" -t $HOME zsh
+stat "zsh [2/3]" $?
+
+zsh -c "source $CONFIG/zsh/.zshrc"
+stat "zsh [3/3]" $?
+
+# Starship
+link starship $CONFIG/starship
+
+# Git
+link git $CONFIG/git
+
+#### DONE ####
+log $ok \
+  "Successfully set up the development environment." \
+  "Failed to set up the development environment."
+[[ $ok -eq 0 ]] && exit 0 || exit 1
+

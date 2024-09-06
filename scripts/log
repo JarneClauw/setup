@@ -1,0 +1,112 @@
+#!/usr/bin/env bash
+
+#### CONSTANTS & VARIABLES ####
+script_dir=$(cd $(dirname ${BASH_SOURCE[0]}) && pwd)
+script_name=$(basename $0)
+
+reset="\e[0m"
+info="\e[34m"
+ok="\e[32m"
+warning="\e[33m"
+error="\e[31m"
+
+options="h"
+options_long="help"
+
+text_help="Usage:
+  $script_name [OPTIONS] [<message_type>] <message>
+  $script_name [OPTIONS] <exit_code> <ok_message> <error_message>
+
+Log a message to the terminal.
+
+Options:
+  -h, --help	Display this message
+
+Message types:
+  info		${info}INFO: <message>${reset}
+  ok		${ok}OK: <message>${reset}
+  warning	${warning}WARNING: <message>${reset}
+  error 	${error}ERROR: <message>${reset}"
+text_info="See '$script_name --help' for more information."
+
+#### FUNCTIONS ####
+print_help() {
+  echo -e "$text_help"
+}
+
+log() {
+  message_type=$1
+  message=$2
+  message_color=""
+  message_tag="${message_type^^}: "
+
+  case $message_type in
+    info)
+      message_color=$info ;;
+    ok)
+      message_color=$ok ;;
+    warning)
+      message_color=$warning ;;
+    error)
+      message_color=$error ;;
+    *)
+      message_color=$reset
+      message_tag="" ;;
+  esac
+
+  echo -e "$(echo -e "$message" | sed "s/\(.*\)/\\${message_color}${message_tag}\1\\${reset}/")"
+}
+
+#### PROCESSING OPTIONS & ARGUMENTS ####
+# Parse the options
+parsed=$("$script_dir/parse_input" $options $options_long "$@")
+if [[ $? -ne 0 ]]; then
+  log error "$parsed"
+  log error "$text_info"
+  exit 1
+fi
+eval set -- "$parsed"
+
+# Handle the options
+while true; do
+  case "$1" in
+    -h|--help)
+      print_help
+      exit 0 ;;
+    --)
+      shift
+      break ;;
+    *)
+      log error "Whoops, this should not have happened!"
+      exit 1 ;;
+  esac
+done
+
+#### LOG MESSAGES ####
+# Log "message"
+if [[ $# -eq 1 ]]; then
+  log "" "$1"
+  exit 0
+fi
+
+# Log type "message"
+if [[ $# -eq 2 ]]; then
+  log "$1" "$2"
+  exit 0
+fi
+
+# Log $? "ok" "error"
+if [[ $# -eq 3 ]]; then
+  if [[ $1 -eq 0 ]]; then
+    log ok "$2"
+  else
+    log error "$3"
+  fi
+  exit 0
+fi
+
+# Anything else
+log error "Wrong number of arguments."
+log error "$text_info"
+exit 1
+

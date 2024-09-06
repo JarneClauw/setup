@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+log() {
+  script_dir=$(cd $(dirname ${BASH_SOURCE[0]}) && pwd)
+  "$script_dir/log" "$@"
+}
+
+is_set() {
+  variable=$1
+
+  if [[ -n "${!variable}" ]]; then
+    return 0
+  fi
+
+  log error "The environment variable '$variable' is not set."
+  return 1
+}
+
+ok=0
+for variable in "$@"; do
+  is_set "$variable"
+  [[ $? -ne 0 ]] && ok=1
+done
+[[ $ok -eq 0 ]] && exit 0 || exit 1
+
