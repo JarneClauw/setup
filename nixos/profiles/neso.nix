@@ -94,5 +94,6 @@
   #### GENERAL APPLICATIONS ####
   moduleTerminal.enable = true;
   moduleDevelopment.enable = true;
+  moduleGaming.enable = true;
   moduleSpicetify.enable = true;
 }
