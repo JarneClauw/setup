@@ -33,6 +33,12 @@
       duf
       ncdu
       procs
+      gnumake
+      zip
+      unzip
+      gcc
+      ripgrep
+      xclip
     ];
   };
 }
