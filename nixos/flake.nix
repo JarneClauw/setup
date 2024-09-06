@@ -4,6 +4,9 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
+
+    spicetify.url = "github:Gerg-L/spicetify-nix";
+    spicetify.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = inputs: {

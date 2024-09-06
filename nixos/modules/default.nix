@@ -17,6 +17,7 @@ inputs: {
     #### APPLICATIONS ####
     ./development.nix
     ./docker.nix
+    ./spicetify.nix
     ./terminal.nix
     ./virtmanager.nix
   ];
