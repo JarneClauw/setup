@@ -71,6 +71,7 @@
       nautilus
       file-roller
       obsidian
+      pandoc
       xournalpp
       spotify
       firefox
