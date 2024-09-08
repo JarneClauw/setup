@@ -21,7 +21,7 @@
     # Add symlinks from ~/data to /media/data for every user
     systemd.tmpfiles.rules = let
       permissionRules = [ "Z /media/data 0770 root data" ];
-      symlinkRuleFunction = user: "L+ /home/${user}/data - - - - /media/data";
+      symlinkRuleFunction = user: "L+ /home/${user}/data - - - - /media/data/data";
       symlinkRules = builtins.map symlinkRuleFunction config.moduleData.users;
     in permissionRules ++ symlinkRules;
   };
