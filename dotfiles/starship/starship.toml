@@ -1,12 +1,9 @@
 #### PROMPT ####
 format = """
-$username\
-$hostname\
-$directory\
-$git_branch\
-$git_commit\
-$git_state\
-$git_status\
+[$username@$hostname ](bold black)\
+[$directory ](bold white)\
+[($git_branch )($git_commit )($git_state )($git_status )](bold purple)\
+[(${custom.python} )](bold yellow)\
 $character"""
 right_format = """
 $nix_shell"""
@@ -14,41 +11,59 @@ add_newline = false
 
 #### GENERAL ####
 [username]
-style_root = "bold black"
-style_user = "bold black"
-format = "[$user@]($style)"
+format = "$user"
 show_always = true
 
 [hostname]
 ssh_only = false
-format = "[$hostname]($style) "
-style = "bold black"
+format = "$hostname"
 
 [directory]
-format = "[$path]($style) [$read_only]($read_only_style)"
-style = "bold white"
+format = "$path([ $read_only]($read_only_style))"
+read_only = "󰌾"
 
 #### VCS ####
 [git_branch]
-format = "[$branch(:$remote_branch)]($style) "
-style = "bold purple"
-ignore_branches = ["HEAD"]
+format = "$branch"
+only_attached = true
 
 [git_commit]
-format = "[$hash$tag]($style) "
-style = "bold purple"
+format = "$hash"
+only_detached = true
 
 [git_state]
-format = "[$state]($style) "
-style = "bold purple"
+format = "$state"
 
 [git_status]
-format = '([\[$ahead_behind$staged$modified$untracked\]]($style) )'
-style = "bold purple"
+format = "(\\[$untracked$deleted$renamed$modified$staged$ahead_behind\\])"
+ahead = "󰜷"
+behind = "󰜮"
+diverged = "󰹺"
+up_to_date = ""
+untracked = "U"
+modified = "M"
+staged = "S"
+renamed = "R"
+deleted = "D"
 
 #### NIX-SHELL ####
 [nix_shell]
-format = "$state "
-impure_msg = "[❄️](bold bright-cyan)" 
-pure_msg = "[❄️](bold white)"
+format = "$state"
+impure_msg = "[](bold bright-cyan)" 
+pure_msg = "[](bold white)"
 
+#### PACKAGES ####
+[custom.python] # Only appears if python is installed
+description = "Python module"
+when = "python --version &> /dev/null"
+format = "\\[$symbol $output\\]"
+symbol = ""
+command = """
+version=$(python --version | cut -d" " -f2 | cut -d"." -f1,2)
+virtualenv=""
+if [[ -n "$VIRTUAL_ENV" ]]; then
+    virtualenv="($(basename $VIRTUAL_ENV))"
+fi
+echo "${version} ${virtualenv}"
+"""
+shell = ["bash"]
