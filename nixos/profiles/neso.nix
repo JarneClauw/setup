@@ -88,6 +88,7 @@
   moduleFonts.enable = true;
   moduleLocale.enable = true;
   moduleNetwork.enable = true;
+  moduleNetwork.name = "neso";
   moduleNix.enable = true;
   modulePipewire.enable = true;
   moduleTouchpad.enable = true;
