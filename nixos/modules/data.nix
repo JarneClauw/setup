@@ -6,23 +6,14 @@
       description = "Enable the data partition module.";
     };
 
-    moduleData.users = lib.mkOption {
-      type = lib.types.listOf lib.types.str;
-      default = [];
-      description = "The users that have access to the data partition.";
-    };
   };
 
   config = lib.mkIf config.moduleData.enable {
-    # Create the data group and add the users to it
-    users.groups.data.members = config.moduleData.users;
-
-    # Change the permissions to allow the data group to access the files
-    # Add symlinks from ~/data to /media/data for every user
-    systemd.tmpfiles.rules = let
-      permissionRules = [ "Z /media/data 0770 root data" ];
-      symlinkRuleFunction = user: "L+ /home/${user}/data - - - - /media/data/data";
-      symlinkRules = builtins.map symlinkRuleFunction config.moduleData.users;
-    in permissionRules ++ symlinkRules;
+    # Change the permissions to allow access to the files
+    # Add a symlink from ~/data to /media/data
+    systemd.tmpfiles.rules = [
+      "Z /media/data - jarne users"
+      "L+ /home/jarne/data - - - - /media/data/data"
+    ];
   };
 }
