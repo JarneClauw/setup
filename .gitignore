@@ -1,0 +1,6 @@
+#### NIX ####
+.direnv/
+.envrc
+
+#### PYTHON ####
+__pycache__
