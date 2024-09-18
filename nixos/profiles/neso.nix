@@ -97,4 +97,6 @@
   moduleDevelopment.enable = true;
   moduleGaming.enable = true;
   moduleSpicetify.enable = true;
+  moduleVirtmanager.enable = true;
+  moduleVirtmanager.users = [ "jarne" ];
 }
