@@ -13,7 +13,7 @@
       default = pkgs.mkShell {
 	packages = with pkgs; [
           coq
-	  coqPackages.qocide
+	  coqPackages.coqide
 	];
       };
     });
