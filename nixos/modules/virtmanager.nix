@@ -1,4 +1,4 @@
-{ lib, config, ... }: {
+{ lib, config, pkgs, ... }: {
   options = {
     moduleVirtmanager.enable = lib.mkOption {
       type = lib.types.bool;
@@ -14,7 +14,10 @@
   };
 
   config = lib.mkIf config.moduleVirtmanager.enable {
-    virtualisation.libvirtd.enable = true;
+    virtualisation.libvirtd = {
+      enable = true;
+      qemu.vhostUserPackages = with pkgs; [ virtiofsd ];
+    };
     users.groups.libvirtd.members = config.moduleVirtmanager.users;
 
     programs.virt-manager.enable = true;
